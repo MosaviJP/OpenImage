@@ -13,7 +13,9 @@ android {
 //        jvmTarget = "1.8"
 //    }
 }
-
+kotlin {
+    jvmToolchain(17)
+}
 dependencies {
     api project(path: ':OpenImageLib')
     compileOnly("io.coil-kt:coil:2.4.0")

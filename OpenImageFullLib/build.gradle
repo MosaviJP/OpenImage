@@ -7,7 +7,9 @@ apply plugin: "kotlin-android"
 android {
     namespace 'com.flyjingfish.openimagefulllib'
 }
-
+kotlin {
+    jvmToolchain(17)
+}
 dependencies {
     api project(path: ':OpenImageGlideLib')
     //完整版引入
