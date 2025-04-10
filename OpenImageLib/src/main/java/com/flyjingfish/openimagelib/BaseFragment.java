@@ -19,7 +19,7 @@ import com.flyjingfish.openimagelib.listener.OnItemLongClickListener;
 import com.flyjingfish.shapeimageviewlib.ShapeImageView;
 
 abstract class BaseFragment extends BaseInnerFragment {
-    OpenImageDetail imageDetail;
+    public OpenImageDetail imageDetail;
     @Nullable
     protected OpenImageUrl openImageUrl;
     int showPosition,clickPosition;

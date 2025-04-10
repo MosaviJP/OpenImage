@@ -8,7 +8,7 @@ android {
     namespace 'com.flyjingfish.openimagefulllib'
 }
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 dependencies {
     api project(path: ':OpenImageGlideLib')

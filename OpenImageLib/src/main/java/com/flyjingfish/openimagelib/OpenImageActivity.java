@@ -76,7 +76,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
     private List<OpenImageUrl> downloadList;
     private PercentImageView downloadImageView;
     private AppCompatImageView closeImageView;
-    private Map<Long,Float> downloadProgress;
+    private Map<Long, Float> downloadProgress;
     private long currentMediaId;
 
     /**
@@ -186,6 +186,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
         rootView.setViewPager2(viewPager);
         rootView.setOnTouchCloseListener(this);
     }
+
     /**
      * 开始拖动图片或视频
      */
@@ -231,6 +232,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
      */
     @Override
     public void onTouchClose(float scale) {
+        setCanFinish(true);
         touchCloseScale = scale;
         photosViewModel.onTouchCloseLiveData.setValue(scale);
         close(true);
@@ -309,7 +311,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 showPosition = position;
-                if (lazyPreload && viewPager.getOffscreenPageLimit() != preloadCount){
+                if (lazyPreload && viewPager.getOffscreenPageLimit() != preloadCount) {
                     viewPager.setOffscreenPageLimit(preloadCount);
                 }
                 setIndicatorPosition(position, getOpenImageBeans().size());
@@ -324,17 +326,17 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
                     selectMediaListener.onSelect(getOpenImageBeans().get(showPosition).openImageUrl, showPosition);
                 }
                 isFirstBacked = true;
-                if (downloadImageView != null && downloadProgress != null){
+                if (downloadImageView != null && downloadProgress != null) {
                     OpenImageDetail curDetail = getOpenImageBeans().get(showPosition);
                     currentMediaId = curDetail.getId();
                     Float progress = downloadProgress.get(currentMediaId);
-                    if (progress == null){
+                    if (progress == null) {
                         downloadImageView.setPercent(0f);
-                    }else {
+                    } else {
                         downloadImageView.setPercent(progress);
                     }
                 }
-                if (!viewPager.isUserInputEnabled()){
+                if (!viewPager.isUserInputEnabled()) {
                     viewPager.setUserInputEnabled(true);
                 }
             }
@@ -353,7 +355,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             initIndicator();
             setIndicatorPosition(showPosition, getOpenImageBeans().size());
         });
-        if (!lazyPreload){
+        if (!lazyPreload) {
             viewPager.setOffscreenPageLimit(preloadCount);
         }
         viewPager.setCurrentItem(selectPos, false);
@@ -400,7 +402,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
      * 展示添加的更多View时回调此方法，调用时机是切换图片或停止拖动图片时
      */
     protected void showMoreView() {
-        if (showPosition >= getOpenImageBeans().size()){
+        if (showPosition >= getOpenImageBeans().size()) {
             return;
         }
         OpenImageDetail openImageDetail = getOpenImageBeans().get(showPosition);
@@ -426,14 +428,14 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             indicatorView.setVisibility(View.VISIBLE);
         }
         if (downloadImageView != null) {
-            if ((mediaType == MediaType.IMAGE && (downloadShowType == MoreViewShowType.IMAGE || downloadShowType == MoreViewShowType.BOTH))||(mediaType == MediaType.VIDEO && (downloadShowType == MoreViewShowType.VIDEO || downloadShowType == MoreViewShowType.BOTH))) {
+            if ((mediaType == MediaType.IMAGE && (downloadShowType == MoreViewShowType.IMAGE || downloadShowType == MoreViewShowType.BOTH)) || (mediaType == MediaType.VIDEO && (downloadShowType == MoreViewShowType.VIDEO || downloadShowType == MoreViewShowType.BOTH))) {
                 downloadImageView.setVisibility(View.VISIBLE);
             } else {
                 downloadImageView.setVisibility(View.GONE);
             }
         }
         if (closeImageView != null) {
-            if ((mediaType == MediaType.IMAGE && (closeShowType == MoreViewShowType.IMAGE || closeShowType == MoreViewShowType.BOTH))||(mediaType == MediaType.VIDEO && (closeShowType == MoreViewShowType.VIDEO || closeShowType == MoreViewShowType.BOTH))) {
+            if ((mediaType == MediaType.IMAGE && (closeShowType == MoreViewShowType.IMAGE || closeShowType == MoreViewShowType.BOTH)) || (mediaType == MediaType.VIDEO && (closeShowType == MoreViewShowType.VIDEO || closeShowType == MoreViewShowType.BOTH))) {
                 closeImageView.setVisibility(View.VISIBLE);
             } else {
                 closeImageView.setVisibility(View.GONE);
@@ -445,7 +447,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
      * 隐藏添加的更多View时回调此方法，调用时机是切换图片或开始拖动图片时
      */
     protected void touchHideMoreView() {
-        if (showPosition >= getOpenImageBeans().size()){
+        if (showPosition >= getOpenImageBeans().size()) {
             return;
         }
         OpenImageDetail openImageDetail = getOpenImageBeans().get(showPosition);
@@ -507,7 +509,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
         if (themeRes != 0) {
             setTheme(themeRes);
             fontStyle = FontStyle.getStyle(AttrsUtils.getTypeValueInt(this, themeRes, R.attr.openImage_statusBar_fontStyle));
-            StatusBarHelper.translucent(this);
+//            StatusBarHelper.translucent(this);
             if (fontStyle == FontStyle.LIGHT) {
                 StatusBarHelper.setStatusBarLightMode(this);
             } else if (fontStyle == FontStyle.FULL_SCREEN) {
@@ -550,7 +552,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             successToast = getResources().getString(R.string.download_end_toast);
             errorToast = getResources().getString(R.string.download_error_toast);
         }
-        initIndicator();
+//        initIndicator();
         pageTransformersKey = getIntent().getStringExtra(OpenParams.PAGE_TRANSFORMERS);
         List<ViewPager2.PageTransformer> pageTransformers = ImageLoadUtils.getInstance().getPageTransformers(pageTransformersKey);
         if (pageTransformers != null && pageTransformers.size() > 0) {
@@ -579,8 +581,8 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
         }
     }
 
-    private void initIndicator(){
-        if (indicatorView != null){
+    private void initIndicator() {
+        if (indicatorView != null) {
             return;
         }
         if (themeRes != 0) {
@@ -605,7 +607,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
                     imageIndicatorAdapter = new ImageIndicatorAdapter(getOpenImageBeans().size(), interval, imageRes, realOrientation);
                     recyclerView.setAdapter(imageIndicatorAdapter);
                     indicatorView = recyclerView;
-                } else{
+                } else {
                     int textColor = AttrsUtils.getTypeValueColor(this, themeRes, R.attr.openImage_indicator_textColor, Color.WHITE);
                     float textSize = AttrsUtils.getTypeValueDimension(this, themeRes, R.attr.openImage_indicator_textSize);
                     indicatorTextBinding = OpenImageIndicatorTextBinding.inflate(getLayoutInflater(), rootView, true);
@@ -623,7 +625,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
                     }
                 }
             }
-        }else {
+        } else {
             if (getOpenImageBeans().size() > 1) {
                 indicatorTextBinding = OpenImageIndicatorTextBinding.inflate(getLayoutInflater(), rootView, true);
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) indicatorTextBinding.tvShowPos.getLayoutParams();
@@ -637,12 +639,12 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
 
     private void initCloseView() {
         boolean closeShow = getIntent().getBooleanExtra(OpenParams.CLOSE_SHOW, false);
-        if (closeShow){
+        if (closeShow) {
             closeParamsKey = getIntent().getStringExtra(OpenParams.CLOSE_PARAMS);
             CloseParams closeParams = null;
             if (!TextUtils.isEmpty(closeParamsKey)) {
                 closeParams = ImageLoadUtils.getInstance().getCloseParams(closeParamsKey);
-                if (closeParams != null && (closeShowType = closeParams.getMoreViewShowType()) == null){
+                if (closeParams != null && (closeShowType = closeParams.getMoreViewShowType()) == null) {
                     closeShowType = MoreViewShowType.IMAGE;
                 }
             }
@@ -667,6 +669,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
         }
 
     }
+
     private void initDownloadView() {
         boolean downloadShow = getIntent().getBooleanExtra(OpenParams.DOWNLOAD_SHOW, false);
         if (downloadShow) {
@@ -683,7 +686,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             DownloadParams downloadParams = null;
             if (!TextUtils.isEmpty(downloadParamsKey)) {
                 downloadParams = ImageLoadUtils.getInstance().getDownloadParams(downloadParamsKey);
-                if (downloadParams != null && (downloadShowType = downloadParams.getMoreViewShowType()) == null){
+                if (downloadParams != null && (downloadShowType = downloadParams.getMoreViewShowType()) == null) {
                     downloadShowType = MoreViewShowType.BOTH;
                 }
             }
@@ -705,11 +708,11 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             downloadImageView.setImageResource(downloadSrc);
             ViewGroup contentView = findViewById(Window.ID_ANDROID_CONTENT);
             FrameLayout rootView;
-            if (contentView instanceof FrameLayout){
+            if (contentView instanceof FrameLayout) {
                 rootView = (FrameLayout) contentView;
-            }else {
+            } else {
                 rootView = new FrameLayout(this);
-                rootView.addView(contentView,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                rootView.addView(contentView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             }
 
             rootView.addView(downloadImageView, downloadLayoutParams);
@@ -727,21 +730,21 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
     protected void checkPermissionAndDownload() {
         OnPermissionsInterceptListener onPermissionsInterceptListener = ImageLoadUtils.getInstance().getPermissionsInterceptListener(onPermissionKey);
         boolean isPermission;
-        if (onPermissionsInterceptListener != null){
+        if (onPermissionsInterceptListener != null) {
             String[] permissions = PermissionConfig.getReadPermissionArray();
-            isPermission = onPermissionsInterceptListener.hasPermissions(this,permissions);
-        }else {
+            isPermission = onPermissionsInterceptListener.hasPermissions(this, permissions);
+        } else {
             isPermission = PermissionChecker.isCheckWriteReadStorage(this);
         }
         if (!isPermission) {
             String[] permissions = PermissionConfig.getReadPermissionArray();
-            if (onPermissionsInterceptListener != null){
+            if (onPermissionsInterceptListener != null) {
                 onPermissionsInterceptListener.requestPermission(this, permissions, (isResult) -> {
-                    if (isResult){
+                    if (isResult) {
                         downloadMedia();
                     }
                 });
-            }else {
+            } else {
                 ActivityCompat.requestPermissions(this, permissions, RequestPermissionsCode);
             }
         } else {
@@ -756,8 +759,8 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             String[] requestPermissions = PermissionConfig.getReadPermissionArray();
             int grantCount = 0;
             for (int grantResult : grantResults) {
-                if (grantResult == PackageManager.PERMISSION_GRANTED){
-                    grantCount ++;
+                if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                    grantCount++;
                 }
             }
             if (grantCount == requestPermissions.length) {
@@ -769,7 +772,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
     }
 
     protected void downloadMedia() {
-        if (showPosition >= getOpenImageBeans().size()){
+        if (showPosition >= getOpenImageBeans().size()) {
             return;
         }
         final OpenImageDetail openImageDetail = getOpenImageBeans().get(showPosition);
@@ -788,7 +791,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
         }
         final long downloadId = openImageDetail.getId();
         downloadList.add(openImageDetail);
-        NetworkHelper.INSTANCE.download(this,this, openImageDetail, new OnDownloadMediaListener() {
+        NetworkHelper.INSTANCE.download(this, this, openImageDetail, new OnDownloadMediaListener() {
             private boolean isWithProgress;
             private boolean isStart;
 
@@ -821,7 +824,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             @Override
             public void onDownloadProgress(int percent) {
                 float percentFloat = percent / 100f;
-                downloadProgress.put(downloadId,percentFloat);
+                downloadProgress.put(downloadId, percentFloat);
                 if (downloadImageView != null && isWithProgress && downloadId == currentMediaId) {
                     downloadImageView.setPercent(percentFloat);
                 }
@@ -963,6 +966,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (canFragmentBack()) {
+                setCanFinish(true);
                 close(false);
             }
             return true;
@@ -1006,7 +1010,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             if ((shareView instanceof PhotoView) && (((PhotoView) shareView).getSrcScaleType() == ShapeImageView.ShapeScaleType.CENTER
                     || ((PhotoView) shareView).getSrcScaleType() == ShapeImageView.ShapeScaleType.CENTER_INSIDE)
                     && exitView != null && (drawable = exitView.getDrawable()) != null) {
-                ((PhotoView) shareView).setExitDrawableWidthHeight(drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight());
+                ((PhotoView) shareView).setExitDrawableWidthHeight(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
             }
             setEnterSharedElementCallback(new SharedElementCallback() {
                 @Override
@@ -1141,7 +1145,8 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             if (onBackView != null) {
                 onBackView.onBack(showPosition);
             }
-            finishAfterTransition();
+            if (isCanFinish)
+                finishAfterTransition();
             return;
         }
         if (isCallClosed) {
@@ -1157,9 +1162,16 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             StatusBarHelper.cancelFullScreen(OpenImageActivity.this);
             mHandler.postDelayed(this::finishAfterTransition, 100);
         } else {
-            finishAfterTransition();
+            if (isCanFinish)
+                finishAfterTransition();
         }
         isCallClosed = true;
+    }
+
+    public Boolean isCanFinish = true;
+
+    public void setCanFinish(Boolean isFinish) {
+        isCanFinish = isFinish;
     }
 
     private View getCoverView() {

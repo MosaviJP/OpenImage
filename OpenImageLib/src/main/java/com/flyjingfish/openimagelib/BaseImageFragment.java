@@ -69,7 +69,7 @@ public abstract class BaseImageFragment<T extends View> extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (imageDetail == null){
+        if (imageDetail == null) {
             requireActivity().finishAfterTransition();
             return;
         }
@@ -85,7 +85,6 @@ public abstract class BaseImageFragment<T extends View> extends BaseFragment {
         photoView.setStartHeight(imageDetail.srcHeight);
         smallCoverImageView.setStartWidth(imageDetail.srcWidth);
         smallCoverImageView.setStartHeight(imageDetail.srcHeight);
-        smallCoverImageView.setZoomable(false);
         if (srcScaleType == ShapeImageView.ShapeScaleType.AUTO_START_CENTER_CROP || srcScaleType == ShapeImageView.ShapeScaleType.AUTO_END_CENTER_CROP) {
             smallCoverImageView.setAutoCropHeightWidthRatio(autoAspectRadio);
             photoView.setAutoCropHeightWidthRatio(autoAspectRadio);
@@ -93,7 +92,6 @@ public abstract class BaseImageFragment<T extends View> extends BaseFragment {
 //        photoView.setZoomable(imageDetail.getType() == MediaType.IMAGE);
         photoView.setNoneClickView(isNoneClickView);
         smallCoverImageView.setNoneClickView(isNoneClickView);
-        showLoading(loadingView);
         loadingView.setVisibility(View.GONE);
         boolean isLoadSmallCover = false;
         if (coverDrawable != null) {
@@ -125,10 +123,10 @@ public abstract class BaseImageFragment<T extends View> extends BaseFragment {
             photoView.setAlpha(1f);
             isLoadSmallCover = true;
         }
-        if (isLoadSmallCover){
+        if (isLoadSmallCover) {
             loadSmallImage();
         }
-        loadBigImage();
+//        loadBigImage();
         setOnListener();
         updateListener();
     }
@@ -206,15 +204,17 @@ public abstract class BaseImageFragment<T extends View> extends BaseFragment {
             clickableViewRootView.setOnClickListener(view1 -> close());
         }
     }
+
     protected void loadSmallImage() {
         if (!TextUtils.equals(imageDetail.getImageUrl(), imageDetail.getCoverImageUrl()) && bothLoadCover) {
             NetworkHelper.INSTANCE.loadImage(requireContext(), imageDetail.getCoverImageUrl(), new OnLoadBigImageListener() {
                 @Override
                 public void onLoadImageSuccess(Drawable drawable, String filePath) {
-                    if (!isLoadSuccess){
+                    if (!isLoadSuccess) {
                         smallCoverImageView.setAlpha(1f);
                         photoView.setAlpha(0f);
                         smallCoverImageView.setImageDrawable(drawable);
+                        hideLoading(loadingView);
                     }
                 }
 
@@ -222,21 +222,24 @@ public abstract class BaseImageFragment<T extends View> extends BaseFragment {
                 public void onLoadImageFailed() {
 
                 }
-            },getViewLifecycleOwner());
+            }, getViewLifecycleOwner());
         }
     }
+
     protected void loadBigImage() {
         if (TextUtils.equals(imageDetail.getImageUrl(), imageDetail.getCoverImageUrl()) && coverDrawable != null) {
-            onImageSuccess(coverDrawable,coverFilePath);
+            onImageSuccess(coverDrawable, coverFilePath);
         } else {
             NetworkHelper.INSTANCE.loadImage(requireContext(), imageDetail.getImageUrl(), new OnLoadBigImageListener() {
                 @Override
                 public void onLoadImageSuccess(Drawable drawable, String filePath) {
-                    onImageSuccess(drawable,filePath);
+                    onImageSuccess(drawable, filePath);
+                    hideLoading(loadingView);
                 }
 
                 @Override
                 public void onLoadImageFailed() {
+                    hideLoading(loadingView);
                     mHandler.post(() -> {
                         if (isTransitionEnd) {
                             setInitImageError();
@@ -246,11 +249,11 @@ public abstract class BaseImageFragment<T extends View> extends BaseFragment {
                         isInitImage = true;
                     });
                 }
-            },getViewLifecycleOwner());
+            }, getViewLifecycleOwner());
         }
     }
 
-    protected void onImageSuccess(Drawable drawable,String filePath) {
+    protected void onImageSuccess(Drawable drawable, String filePath) {
         mHandler.post(() -> {
             photoView.setImageDrawable(drawable);
             photoView.setImageFilePath(filePath);
@@ -258,9 +261,9 @@ public abstract class BaseImageFragment<T extends View> extends BaseFragment {
             if (shouldUseSmallCoverAnim) {
                 initCoverAnim(imageWidth, imageHeight, true);
                 Observer<Boolean> observer = aBoolean -> hideLoading(loadingView);
-                if (!isTransitionEnd){
+                if (!isTransitionEnd) {
                     setTransitionEndListener(observer);
-                }else {
+                } else {
                     observer.onChanged(true);
                 }
                 if (isTransitionEnd && coverAnim != null) {
@@ -282,9 +285,9 @@ public abstract class BaseImageFragment<T extends View> extends BaseFragment {
                     photoView.setAlpha(1f);
                     loadPrivateImageFinish(true);
                 };
-                if (photoView.getAlpha() == 0f && (srcScaleType == ShapeImageView.ShapeScaleType.CENTER_INSIDE || srcScaleType == ShapeImageView.ShapeScaleType.CENTER) && !isTransitionEnd){
+                if (photoView.getAlpha() == 0f && (srcScaleType == ShapeImageView.ShapeScaleType.CENTER_INSIDE || srcScaleType == ShapeImageView.ShapeScaleType.CENTER) && !isTransitionEnd) {
                     setTransitionEndListener(observer);
-                }else {
+                } else {
                     observer.onChanged(isTransitionEnd);
                 }
             }
@@ -335,9 +338,9 @@ public abstract class BaseImageFragment<T extends View> extends BaseFragment {
                         isInitImage = true;
                     });
                 }
-            },getViewLifecycleOwner());
+            }, getViewLifecycleOwner());
         } else if (isTransitionEnd) {
-            loadingView.setVisibility(isLoading?View.VISIBLE:View.GONE);
+            loadingView.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         }
     }
 

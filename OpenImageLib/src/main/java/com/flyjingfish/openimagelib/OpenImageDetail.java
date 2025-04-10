@@ -4,7 +4,7 @@ package com.flyjingfish.openimagelib;
 import com.flyjingfish.openimagelib.beans.OpenImageUrl;
 import com.flyjingfish.openimagelib.enums.MediaType;
 
-class OpenImageDetail implements OpenImageUrl {
+public class OpenImageDetail implements OpenImageUrl {
     public OpenImageUrl openImageUrl;
     public int srcWidth;
     public int srcHeight;
