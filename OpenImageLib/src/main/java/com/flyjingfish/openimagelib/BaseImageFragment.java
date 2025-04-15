@@ -126,10 +126,18 @@ public abstract class BaseImageFragment<T extends View> extends BaseFragment {
         if (isLoadSmallCover) {
             loadSmallImage();
         }
-//        loadBigImage();
+        if (isLoadBigImage)
+            loadBigImage();
         setOnListener();
         updateListener();
     }
+
+    public Boolean isLoadBigImage = true;
+
+    public void setLoadBigImage(Boolean isLoadBigImage) {
+        this.isLoadBigImage = isLoadBigImage;
+    }
+
 
     private void updateListener() {
         photosViewModel.onAddItemListenerLiveData.observe(getViewLifecycleOwner(), s -> {

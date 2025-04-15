@@ -25,4 +25,8 @@ public class StandardOpenImageVideoPlayer2 extends OpenImageCoverVideoPlayer {
         return R.layout.open_image_layout_videos2;
     }
 
+    public void startViewChange(int visible) {
+        findViewById(R.id.start).setVisibility(visible);
+    }
+
 }

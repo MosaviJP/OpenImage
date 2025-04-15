@@ -1145,8 +1145,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             if (onBackView != null) {
                 onBackView.onBack(showPosition);
             }
-            if (isCanFinish)
-                finishAfterTransition();
+            finishAfterTransition();
             return;
         }
         if (isCallClosed) {
@@ -1162,16 +1161,9 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
             StatusBarHelper.cancelFullScreen(OpenImageActivity.this);
             mHandler.postDelayed(this::finishAfterTransition, 100);
         } else {
-            if (isCanFinish)
-                finishAfterTransition();
+            finishAfterTransition();
         }
         isCallClosed = true;
-    }
-
-    public Boolean isCanFinish = true;
-
-    public void setCanFinish(Boolean isFinish) {
-        isCanFinish = isFinish;
     }
 
     private View getCoverView() {

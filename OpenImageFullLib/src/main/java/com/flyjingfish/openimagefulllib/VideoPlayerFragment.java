@@ -30,7 +30,7 @@ public class VideoPlayerFragment extends BaseImageFragment<LoadingView> {
     /**
      * 设置为true表示视频可以缩放，设置为false表示视频不可缩放恢复为之前到设置
      */
-    public static boolean Scaling = true;
+    public static boolean Scaling = false;
 
     @Nullable
     @Override

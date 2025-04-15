@@ -184,9 +184,16 @@ class BaseActivity extends AppCompatActivity {
         ImageLoadUtils.getInstance().setCanOpenOpenImageActivity(clickContextKey, true);
     }
 
+    public Boolean isCanFinish = true;
+
+    public void setCanFinish(Boolean isFinish) {
+        isCanFinish = isFinish;
+    }
     @Override
     public void finishAfterTransition() {
-        super.finishAfterTransition();
+        if (isCanFinish)
+            super.finishAfterTransition();
+
         ImageLoadUtils.getInstance().setCanOpenOpenImageActivity(clickContextKey, true);
     }
 
