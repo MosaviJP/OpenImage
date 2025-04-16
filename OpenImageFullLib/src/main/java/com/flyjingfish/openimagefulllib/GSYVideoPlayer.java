@@ -30,7 +30,7 @@ public class GSYVideoPlayer extends StandardGSYVideoPlayer {
 
     private String pageContextKey;
     private String uUKey;
-    private boolean mute;//是否需要静音
+    public static boolean mute;//是否需要静音
     protected int showType = GSYVideoType.getShowType();
 
     protected LifecycleOwner lifecycleOwner;

@@ -141,16 +141,8 @@ public class StatusBarHelper {
         }
     }
 
-    @TargetApi(28)
+    @androidx.annotation.RequiresApi(28)
     private static void realHandleDisplayCutoutMode(Window window, View decorView) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            WindowInsetsController controller = window.getInsetsController();
-            if (controller != null) {
-                controller.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
-                controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-            }
-        }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) { // Android 11+
             WindowMetrics metrics = window.getWindowManager().getMaximumWindowMetrics();
             if (metrics.getWindowInsets().getDisplayCutout() != null) {
@@ -163,7 +155,7 @@ public class StatusBarHelper {
                 }
                 window.setAttributes(params);
             }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // Android 9+
+        } else { // Android 9+
             if (decorView.getRootWindowInsets() != null &&
                     decorView.getRootWindowInsets().getDisplayCutout() != null) {
                 WindowManager.LayoutParams params = window.getAttributes();

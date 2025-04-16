@@ -509,7 +509,7 @@ public abstract class OpenImageActivity extends BaseActivity implements TouchClo
         if (themeRes != 0) {
             setTheme(themeRes);
             fontStyle = FontStyle.getStyle(AttrsUtils.getTypeValueInt(this, themeRes, R.attr.openImage_statusBar_fontStyle));
-//            StatusBarHelper.translucent(this);
+            StatusBarHelper.translucent(this);
             if (fontStyle == FontStyle.LIGHT) {
                 StatusBarHelper.setStatusBarLightMode(this);
             } else if (fontStyle == FontStyle.FULL_SCREEN) {
